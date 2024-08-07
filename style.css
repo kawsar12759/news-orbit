@@ -1,0 +1,12 @@
+body {
+    background-color: #f6f6f6;
+}
+
+.text-purple {
+    color: #5D5FEF;
+}
+
+.bg-purple {
+    background-color: #5D5FEF;
+    color: white;
+}
