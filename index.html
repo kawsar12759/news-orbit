@@ -35,10 +35,35 @@
         <hr>
         <section class="d-flex justify-content-center my-4">
             <div style="width: 95%;" class="d-flex justify-content-between" id="categories-section">
-                <div>
-                    <a class="no-underline fw-medium" href="">Home</a>
+                <div >
+                    <a class="active-category fw-medium px-2 py-1" id="home" href="#">Home</a>
                 </div>
-
+            </div>
+        </section>
+        <section class="mt-5">
+            <div class="bg-white py-3 rounded mb-5">
+                <h5 class="m-0 ps-3">Click on Categories to Look for News</h5>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div class="d-flex align-content-center">
+                    <div class="d-flex align-content-center justify-content-center">
+                        <h5 class="mb-0 mt-1 me-3 py-0">Sort by View:</h5>
+                    </div>
+                    <div class="dropdown">
+                        <button style="color: #858585;" class="btn btn-secondary dropdown-toggle bg-white border-0"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="me-5">Default</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">High -> Low</a></li>
+                            <li><a class="dropdown-item" href="#">Low -> High</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <button class="btn btn-purple px-3 me-3">Today's Pick</button>
+                    <button class="btn btn-rev-purple px-3">Trending</button>
+                </div>
             </div>
         </section>
     </main>
