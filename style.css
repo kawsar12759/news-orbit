@@ -10,3 +10,8 @@ body {
     background-color: #5D5FEF;
     color: white;
 }
+
+.no-underline {
+    text-decoration: none;
+    color: #858585;
+}
