@@ -1,5 +1,5 @@
 
-
+let allNewsCollection;
 
 async function loadCategories() {
     const res = await fetch('https://openapi.programming-hero.com/api/news/categories');
@@ -25,36 +25,55 @@ function showCategories(newsCategories) {
 async function loadNews(id, category) {
     const res = await fetch(`https://openapi.programming-hero.com/api/news/category/${id}`);
     const data = await res.json();
-    showNews(data.data, category);
+    allNewsCollection = data.data;
+    showNews(allNewsCollection, category);
 }
 
 async function loadTodaysNews(id, category) {
     const res = await fetch(`https://openapi.programming-hero.com/api/news/category/${id}`);
     const data = await res.json();
+    allNewsCollection = data.data;
     let todaysNews = [];
-    for (news of data.data) {
+    for (news of allNewsCollection) {
         const status = news.others_info.is_todays_pick;
         if (status === true) {
             todaysNews.push(news);
         }
     }
     showNews(todaysNews, category);
+    allNewsCollection = todaysNews;
 }
 
 async function loadTrendingNews(id, category) {
     const res = await fetch(`https://openapi.programming-hero.com/api/news/category/${id}`);
     const data = await res.json();
-    let todaysNews = [];
-    for (news of data.data) {
+    allNewsCollection = data.data;
+    let trendingNews = [];
+    for (news of allNewsCollection) {
         const status = news.others_info.is_trending;
         if (status === true) {
-            todaysNews.push(news);
+            trendingNews.push(news);
         }
     }
-    showNews(todaysNews, category);
+    showNews(trendingNews, category);
+    allNewsCollection = trendingNews;
 }
+
+async function loadHighToLowSortedData(id, category) {
+    allNewsCollection.sort((a, b) => b.total_view - a.total_view)
+    showNews(allNewsCollection, category);
+}
+
+async function loadLowToHighSortedData(id, category) {
+    allNewsCollection.sort((a, b) => a.total_view - b.total_view)
+    showNews(allNewsCollection, category);
+}
+
+
+let viewCount = {};
 const noNewsAlertSection = document.getElementById('no-news-alert-section');
 function showNews(allNews, category) {
+    let counter = 0;
     const newsSection = document.getElementById('news-section');
     newsSection.innerHTML = '';
     stopSpinner();
@@ -65,6 +84,8 @@ function showNews(allNews, category) {
         noNewsAlertSection.classList.add('d-none');
     }
     for (news of allNews) {
+        viewCount[`${counter}`] = news.total_view ? news.total_view : 0;
+        counter++;
         const newsDiv = document.createElement('div');
         newsDiv.classList.add('bg-white');
         newsDiv.classList.add('p-4');
@@ -127,6 +148,7 @@ let idNo;
 let nameOfCategory;
 document.getElementById('categories-section').addEventListener('click', function (event) {
     if (event.target.tagName === 'A') {
+        document.getElementById('sort-type').innerText = "Default";
         nameOfCategory = event.target.textContent;
         if (nameOfCategory !== "Breaking News" && nameOfCategory !== "Regular News" && nameOfCategory !== "International News" && nameOfCategory !== "Sports" && nameOfCategory !== "Entertainment" && nameOfCategory !== "Culture" && nameOfCategory !== "Arts" && nameOfCategory !== "All News") {
             console.log(nameOfCategory);
@@ -162,6 +184,7 @@ document.getElementById('categories-section').addEventListener('click', function
 
 
 document.getElementById('todays-pick-btn').addEventListener('click', function () {
+    document.getElementById('sort-type').innerText = "Default";
     loadSpinner();
     const todaysBtn = document.getElementById('todays-pick-btn');
     todaysBtn.classList.remove('btn-not-clicked');
@@ -173,6 +196,7 @@ document.getElementById('todays-pick-btn').addEventListener('click', function ()
 })
 
 document.getElementById('trending-btn').addEventListener('click', function () {
+    document.getElementById('sort-type').innerText = "Default";
     loadSpinner();
     const todaysBtn = document.getElementById('todays-pick-btn');
     todaysBtn.classList.remove('btn-clicked');
@@ -194,3 +218,13 @@ function stopSpinner() {
 }
 const infoSection = document.getElementById('info-and-selection-section');
 
+
+document.getElementById('high-to-low').addEventListener('click', function () {
+    loadHighToLowSortedData(idNo, nameOfCategory);
+    document.getElementById('sort-type').innerText = "High -> Low";
+})
+
+document.getElementById('low-to-high').addEventListener('click', function () {
+    loadLowToHighSortedData(idNo, nameOfCategory);
+    document.getElementById('sort-type').innerText = "Low -> High";
+})
