@@ -123,10 +123,15 @@ function showNews(allNews, category) {
                             <p class="news-description mb-3">${news.details.slice(0, 500)}...</p>
                         </div>
                         <div class="d-flex justify-content-between align-content-center px-2">
-                            <div>
-                                <div>
-                                    <h6 class="author-name text-center">${news.author.name ? news.author.name : "Anonymous"}</h6>
-                                    <p class="text-center publish-date">${news.author.published_date ? news.author.published_date.substring(0, 10) : "Date Unknown"}</p>
+                            <div class="d-flex">
+                                <div class="me-3">
+                                            <img style="width:45px; height: 45px;"
+                                             src="${news.author.img}"
+                                            class="rounded-circle" alt="">
+                                </div>
+                                <div>  
+                                        <h6 class="author-name">${news.author.name ? news.author.name : "Anonymous"}</h6>
+                                        <p class="publish-date mb-0 pb-0">${news.author.published_date ? news.author.published_date.substring(0, 10) : "Date Unknown"}</p>
                                 </div>
                             </div>
                             <div style="font-size: 18px;" class="d-flex justify-content-center align-items-center">
