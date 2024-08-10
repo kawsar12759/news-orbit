@@ -59,6 +59,24 @@ async function loadTrendingNews(id, category) {
     allNewsCollection = trendingNews;
 }
 
+async function loadNewsDetails(id) {
+    const res = await fetch(`https://openapi.programming-hero.com/api/news/${id}`);
+    const data = await res.json();
+    const modalBody = document.getElementById('modal-body');
+    modalBody.innerHTML = `
+    <div>
+        <img class="w-100" src="${data.data[0].image_url}" alt="">
+    </div>
+    <div>
+        <h3 class="text-center my-3">${data.data[0].title}<h3>
+    </div>
+    <div>
+        <p>${data.data[0].details}<p>
+    </div>
+    `
+}
+
+
 async function loadHighToLowSortedData(id, category) {
     allNewsCollection.sort((a, b) => b.total_view - a.total_view)
     showNews(allNewsCollection, category);
@@ -130,7 +148,7 @@ function showNews(allNews, category) {
                                 </div>
                                
                             </div>
-                            <div style="font-size: 22px;" class="d-flex align-items-center">
+                            <div onclick="showModal('${news._id}')" style="font-size: 22px;" class="d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                                 <i class="fa-solid fa-arrow-right text-purple"></i>
                             </div>
                         </div>
@@ -228,3 +246,7 @@ document.getElementById('low-to-high').addEventListener('click', function () {
     loadLowToHighSortedData(idNo, nameOfCategory);
     document.getElementById('sort-type').innerText = "Low -> High";
 })
+
+function showModal(id) {
+    loadNewsDetails(id);
+}
