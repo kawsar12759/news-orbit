@@ -1,13 +1,21 @@
-
+// Variable to store the news data
 let allNewsCollection;
 
+// loads category-wise news
 async function loadCategories() {
     const res = await fetch('https://openapi.programming-hero.com/api/news/categories');
     const data = await res.json();
     showCategories(data.data.news_category);
 }
+
 loadCategories();
+
+
+// variable to store id for news caregories
 let catIds = {};
+
+
+// function to show News-Categories
 function showCategories(newsCategories) {
     const categoriesSection = document.getElementById('categories-section');
     for (newsCategory of newsCategories) {
@@ -22,6 +30,7 @@ function showCategories(newsCategories) {
 
 }
 
+// Loads the news
 async function loadNews(id, category) {
     const res = await fetch(`https://openapi.programming-hero.com/api/news/category/${id}`);
     const data = await res.json();
@@ -29,6 +38,8 @@ async function loadNews(id, category) {
     showNews(allNewsCollection, category);
 }
 
+
+// Loads only the news from today
 async function loadTodaysNews(id, category) {
     const res = await fetch(`https://openapi.programming-hero.com/api/news/category/${id}`);
     const data = await res.json();
@@ -44,6 +55,8 @@ async function loadTodaysNews(id, category) {
     allNewsCollection = todaysNews;
 }
 
+
+// Loads the trending News
 async function loadTrendingNews(id, category) {
     const res = await fetch(`https://openapi.programming-hero.com/api/news/category/${id}`);
     const data = await res.json();
@@ -59,6 +72,8 @@ async function loadTrendingNews(id, category) {
     allNewsCollection = trendingNews;
 }
 
+
+// Loads and shows the Details of the news
 async function loadNewsDetails(id) {
     const res = await fetch(`https://openapi.programming-hero.com/api/news/${id}`);
     const data = await res.json();
@@ -77,21 +92,29 @@ async function loadNewsDetails(id) {
 }
 
 
+
+// Sort News from High to Low on View Count
 async function loadHighToLowSortedData(id, category) {
     allNewsCollection.sort((a, b) => b.total_view - a.total_view)
     showNews(allNewsCollection, category);
 }
 
+
+// Sort News from Low to High on View Count
 async function loadLowToHighSortedData(id, category) {
     allNewsCollection.sort((a, b) => a.total_view - b.total_view)
     showNews(allNewsCollection, category);
 }
 
 
-let viewCount = {};
+
+// The No News Alert Section
 const noNewsAlertSection = document.getElementById('no-news-alert-section');
+
+
+// Shows News
 function showNews(allNews, category) {
-    let counter = 0;
+
     const newsSection = document.getElementById('news-section');
     newsSection.innerHTML = '';
     stopSpinner();
@@ -102,8 +125,6 @@ function showNews(allNews, category) {
         noNewsAlertSection.classList.add('d-none');
     }
     for (news of allNews) {
-        viewCount[`${counter}`] = news.total_view ? news.total_view : 0;
-        counter++;
         const newsDiv = document.createElement('div');
         newsDiv.classList.add('bg-white');
         newsDiv.classList.add('p-4');
@@ -153,7 +174,7 @@ function showNews(allNews, category) {
                                 </div>
                                
                             </div>
-                            <div onclick="showModal('${news._id}')" style="font-size: 22px;" class="d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            <div id="click-arrow" onclick="showModal('${news._id}')" style="font-size: 22px;" class="d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                                 <i class="fa-solid fa-arrow-right text-purple"></i>
                             </div>
                         </div>
@@ -166,9 +187,17 @@ function showNews(allNews, category) {
     newsNumber.innerText = `${allNews.length} items found for category ${category}`
 }
 
+
+//Variable to Store Previously Selected Page
 let prev = 'home';
+
+//Variable to store id of News Category
 let idNo;
+
+// Variable to story Name of the News Category
 let nameOfCategory;
+
+//EventHandler on News Categories
 document.getElementById('categories-section').addEventListener('click', function (event) {
     if (event.target.tagName === 'A') {
         document.getElementById('sort-type').innerText = "Default";
@@ -206,6 +235,7 @@ document.getElementById('categories-section').addEventListener('click', function
 });
 
 
+// EventHandler on Today's Pick Button
 document.getElementById('todays-pick-btn').addEventListener('click', function () {
     document.getElementById('sort-type').innerText = "Default";
     loadSpinner();
@@ -218,6 +248,8 @@ document.getElementById('todays-pick-btn').addEventListener('click', function ()
     loadTodaysNews(idNo, nameOfCategory);
 })
 
+
+// EventHandler on Trending Button
 document.getElementById('trending-btn').addEventListener('click', function () {
     document.getElementById('sort-type').innerText = "Default";
     loadSpinner();
@@ -230,28 +262,36 @@ document.getElementById('trending-btn').addEventListener('click', function () {
     loadTrendingNews(idNo, nameOfCategory);
 })
 
+//Loads the loading spinner
 function loadSpinner() {
     const spinner = document.getElementById('spinner-section');
     spinner.classList.remove('d-none');
 }
 
+
+//Hides the Spinner
 function stopSpinner() {
     const spinner = document.getElementById('spinner-section');
     spinner.classList.add('d-none');
 }
+
+//News Count and Sorting, Selection Section
 const infoSection = document.getElementById('info-and-selection-section');
 
 
+//Event Handler on High to Low Sort
 document.getElementById('high-to-low').addEventListener('click', function () {
     loadHighToLowSortedData(idNo, nameOfCategory);
     document.getElementById('sort-type').innerText = "High -> Low";
 })
 
+//Event Handler on Low to High Sort
 document.getElementById('low-to-high').addEventListener('click', function () {
     loadLowToHighSortedData(idNo, nameOfCategory);
     document.getElementById('sort-type').innerText = "Low -> High";
 })
 
+//Loads the Modal that contains the News Details
 function showModal(id) {
     loadNewsDetails(id);
 }

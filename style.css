@@ -22,6 +22,8 @@ body {
     background-color: #eeefff;
 }
 
+
+/* Applied to the Today's Pick and Trending Button */
 .btn-clicked {
     background-color: #5D5FEF;
     color: white;
@@ -80,4 +82,8 @@ body {
     font-size: 18px;
     color: #515151;
     font-weight: 700;
+}
+
+#click-arrow:hover {
+    cursor: pointer;
 }
